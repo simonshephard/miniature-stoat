@@ -40,26 +40,48 @@ app.get('/hello', function(req, res){
 // req.body will hold the text fields, if there were any
 
 
-// START WITH STANDARD
+// START WITH STANDARD HANDLER
 // app.post('/api/fileanalyse', function(req, res){  
   // first just return greeting
   // res.json({greetings: "Hello, API"});
   // WORKS
   // next try to get req
   // res.json({reqBody: req.body});
-  // IS EMPTY
+  // IS EMPTY = {} - DOES NOT EVEN INCLUDE "reqBody" as below!
+  // MAKES SENSE AS req.body NOW HANDLED BY MULTER SO NOT ACCESSIBLE?
 // });
 
-// NOW ADD upload into post handler
-// app.post('/api/fileanalyse', upload.single('upfile'), function (req, res, next) {
+// NOW ADD upload TO POST HANDLER
+app.post('/api/fileanalyse', upload.single('upfile'), function (req, res, next) {
   // same as before - first just return greeting
   // res.json({greetings: "Hello, API"});
   // WORKS
   // and also repeat - next try to get req
   // res.json({reqBody: req.body});
-  // IS EMPTY {"reqBody": {}}
-
-// });
+  // IS EMPTY = {"reqBody": {}} - BUT SHOWS "reqBody" AT LEAST
+  // STILL MAKES SENSE AS NO TEXT FIELDS IN POST - JUST A SINGLE FILE - SO ACCESSIBLE BUT EMPTY?
+  
+  // now try to get req.file
+  res.json({
+    reqBody: req.body,
+    reqFile: req.file
+  });
+  // WORKS - returns following:
+{
+  "reqBody": {},
+  "reqFile": {
+    "fieldname": "upfile",
+    "originalname": "test.txt",
+    "encoding": "7bit",
+    "mimetype": "text/plain",
+    "destination": "uploads/",
+    "filename": "7d86b3408fb1e91912ad061f27110219",
+    "path": "uploads/7d86b3408fb1e91912ad061f27110219",
+    "size": 0
+  }
+}
+  
+});
 
 
 // OKUser stories:
@@ -79,8 +101,6 @@ app.get('/hello', function(req, res){
 // Choose and Upload file
 // https://miniature-stoat.glitch.me/api/fileanalyse
 // Cannot POST /api/fileanalyse
-
-
 
 
 app.listen(process.env.PORT || 3000, function () {
