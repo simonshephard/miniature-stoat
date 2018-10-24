@@ -40,46 +40,64 @@ app.get('/hello', function(req, res){
 // req.body will hold the text fields, if there were any
 
 
-// START WITH STANDARD HANDLER
+// **START WITH STANDARD HANDLER
 // app.post('/api/fileanalyse', function(req, res){  
-  // first just return greeting
+  // **first just return greeting
   // res.json({greetings: "Hello, API"});
   // WORKS
-  // next try to get req
+  // **next try to get req
   // res.json({reqBody: req.body});
   // IS EMPTY = {} - DOES NOT EVEN INCLUDE "reqBody" as below!
   // MAKES SENSE AS req.body NOW HANDLED BY MULTER SO NOT ACCESSIBLE?
 // });
 
-// NOW ADD upload TO POST HANDLER
+// **NOW ADD upload TO POST HANDLER
 app.post('/api/fileanalyse', upload.single('upfile'), function (req, res, next) {
-  // same as before - first just return greeting
+  // **same as before - first just return greeting
   // res.json({greetings: "Hello, API"});
   // WORKS
-  // and also repeat - next try to get req
+  // **and also repeat - next try to get req
   // res.json({reqBody: req.body});
   // IS EMPTY = {"reqBody": {}} - BUT SHOWS "reqBody" AT LEAST
   // STILL MAKES SENSE AS NO TEXT FIELDS IN POST - JUST A SINGLE FILE - SO ACCESSIBLE BUT EMPTY?
   
-  // now try to get req.file
-  res.json({
-    reqBody: req.body,
-    reqFile: req.file
-  });
+  // **now try to get req.file
+  // res.json({
+  //   reqBody: req.body,
+  //   reqFile: req.file
+  // });
   // WORKS - returns following:
-{
-  "reqBody": {},
-  "reqFile": {
-    "fieldname": "upfile",
-    "originalname": "test.txt",
-    "encoding": "7bit",
-    "mimetype": "text/plain",
-    "destination": "uploads/",
-    "filename": "7d86b3408fb1e91912ad061f27110219",
-    "path": "uploads/7d86b3408fb1e91912ad061f27110219",
-    "size": 0
-  }
-}
+  // {
+  //   "reqBody": {},
+  //   "reqFile": {
+  //     "fieldname": "upfile",
+  //     "originalname": "test.txt",
+  //     "encoding": "7bit",
+  //     "mimetype": "text/plain",
+  //     "destination": "uploads/",
+  //     "filename": "7d86b3408fb1e91912ad061f27110219",
+  //     "path": "uploads/7d86b3408fb1e91912ad061f27110219",
+  //     "size": 0
+  //   }
+  // }
+  
+  // Key - Description - Note
+  // fieldname - Field name specified in the form	
+  // originalname - Name of the file on the user's computer	
+  // encoding - Encoding type of the file	
+  // mimetype - Mime type of the file	
+  // size - Size of the file in bytes	
+  // destination - The folder to which the file has been saved - DiskStorage
+  // filename - The name of the file within the destination - DiskStorage
+  // path - The full path to the uploaded file - DiskStorage
+  // buffer - A Buffer of the entire file - MemoryStorage
+  
+  // f**inally repeat to provide file name and size in bytes in JSON as required
+  res.json({
+    file_name: req.file.originalname,
+    file_size_bytes: req.file.size
+  });
+  
   
 });
 
