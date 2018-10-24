@@ -26,7 +26,15 @@ app.get('/hello', function(req, res){
 // use multer npm package to handle file uploading
 
 app.post('/api/fileanalyse', function(req, res){
-  res.json({greetings: "Hello, API"});
+  
+  // first just return greeting
+  // res.json({greetings: "Hello, API"});
+  
+  // next try to get req
+  res.json({
+    "req.body": req.body
+  });
+  
 });
 
 
