@@ -29,11 +29,13 @@ app.post('/api/fileanalyse', function(req, res){
   
   // first just return greeting
   // res.json({greetings: "Hello, API"});
+  // WORKS
   
   // next try to get req
-  res.json({
-    "req.body": req.body
-  });
+  // res.json({reqBody: req.body});
+  // IS EMPTY
+  
+  
   
 });
 
